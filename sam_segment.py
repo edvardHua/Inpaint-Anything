@@ -5,7 +5,7 @@ from pathlib import Path
 from matplotlib import pyplot as plt
 from typing import Any, Dict, List
 
-from segment_anything import SamPredictor, sam_model_registry
+from segment_anything import SamPredictor, SamAutomaticMaskGenerator, sam_model_registry
 from utils import load_img_to_array, save_array_to_img, dilate_mask, \
     show_mask, show_points
 
@@ -18,19 +18,23 @@ def predict_masks_with_sam(
         ckpt_p: str,
         device="cuda"
 ):
-    point_coords = np.array(point_coords)
-    point_labels = np.array(point_labels)
+    # point_coords = np.array(point_coords)
+    # point_labels = np.array(point_labels)
     sam = sam_model_registry[model_type](checkpoint=ckpt_p)
     sam.to(device=device)
-    predictor = SamPredictor(sam)
+    # predictor = SamPredictor(sam)
 
-    predictor.set_image(img)
-    masks, scores, logits = predictor.predict(
-        point_coords=point_coords,
-        point_labels=point_labels,
-        multimask_output=True,
-    )
-    return masks, scores, logits
+    # predictor.set_image(img)
+    # masks, scores, logits = predictor.predict(
+    #     point_coords=point_coords,
+    #     point_labels=point_labels,
+    #     multimask_output=True,
+    # )
+
+    mask_generator = SamAutomaticMaskGenerator(sam)
+    masks = mask_generator.generate(img)
+
+    return masks, None, None
 
 
 def setup_args(parser):

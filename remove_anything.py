@@ -70,6 +70,9 @@ if __name__ == "__main__":
     setup_args(parser)
     args = parser.parse_args(sys.argv[1:])
 
+    from pprint import pprint
+    pprint(vars(args))
+
     img = load_img_to_array(args.input_img)
 
     masks, _, _ = predict_masks_with_sam(
@@ -78,7 +81,7 @@ if __name__ == "__main__":
         args.point_labels,
         model_type=args.sam_model_type,
         ckpt_p=args.sam_ckpt,
-        device="cuda",
+        device="cpu",
     )
     masks = masks.astype(np.uint8) * 255
 
@@ -102,11 +105,11 @@ if __name__ == "__main__":
         # save the pointed and masked image
         dpi = plt.rcParams['figure.dpi']
         height, width = img.shape[:2]
-        plt.figure(figsize=(width/dpi/0.77, height/dpi/0.77))
+        plt.figure(figsize=(width / dpi / 0.77, height / dpi / 0.77))
         plt.imshow(img)
         plt.axis('off')
         show_points(plt.gca(), [args.point_coords], args.point_labels,
-                    size=(width*0.04)**2)
+                    size=(width * 0.04) ** 2)
         plt.savefig(img_points_p, bbox_inches='tight', pad_inches=0)
         show_mask(plt.gca(), mask, random_color=False)
         plt.savefig(img_mask_p, bbox_inches='tight', pad_inches=0)
