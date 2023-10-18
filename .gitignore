@@ -10,3 +10,12 @@ __pycache__/
 
 # tmp
 ~*
+
+# pretrained_models
+pretrained_models/big-lama
+# pytracking/pretrain/
+*.pth
+
+results/*
+
+

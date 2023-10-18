@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 from matplotlib import pyplot as plt
 from typing import Any, Dict, List
+import torch
 
 from segment_anything import SamPredictor, SamAutomaticMaskGenerator, sam_model_registry
 from utils import load_img_to_array, save_array_to_img, dilate_mask, \
@@ -35,6 +36,14 @@ def predict_masks_with_sam(
     masks = mask_generator.generate(img)
 
     return masks, None, None
+
+
+def build_sam_model(model_type: str, ckpt_p: str, device="cuda"):
+    sam = sam_model_registry[model_type](checkpoint=ckpt_p)
+    sam.to(device=device)
+    predictor = SamPredictor(sam)
+    return predictor
+
 
 
 def setup_args(parser):
@@ -83,6 +92,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     setup_args(parser)
     args = parser.parse_args(sys.argv[1:])
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
     img = load_img_to_array(args.input_img)
 
@@ -92,7 +102,7 @@ if __name__ == "__main__":
         args.point_labels,
         model_type=args.sam_model_type,
         ckpt_p=args.sam_ckpt,
-        device="cuda",
+        device=device,
     )
     masks = masks.astype(np.uint8) * 255
 
