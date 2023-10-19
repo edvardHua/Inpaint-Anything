@@ -106,7 +106,7 @@ def draw(event):
 
 
 root = ttk.Window(themename="cosmo")
-root.title("Image Editor")
+root.title("")
 
 pen_size_dv = DoubleVar()
 pen_size_dv.set(3)
@@ -114,12 +114,12 @@ pen_size_dv.set(3)
 # 宽 x 高，+x+y，决定了窗口展示的位置
 root.geometry("950x580+300+110")
 root.resizable(0, 0)
-icon = ttk.PhotoImage(file='btn_imgs/icon.png')
+icon = ttk.PhotoImage(file='ui_imgs/icon.png')
 root.iconphoto(False, icon)
 
 # up_frame = ttk.Frame(root, width=950, height=50)
 title = ttk.Label(root, text="Image Inpaint", anchor="center")
-title.pack(padx=5, pady=2, fill=tk.BOTH)
+title.pack(padx=5, pady=10, fill=tk.BOTH)
 ttk.Separator(root).pack(padx=5, pady=5, fill=tk.X)
 
 # the left frame contain operator buttons
@@ -132,17 +132,21 @@ canvas.pack()
 # binding the Canvas to the B1-Motion event
 canvas.bind("<B1-Motion>", draw)
 
-# button for adding/opening the image file
-image_button = ttk.Button(left_frame, text="Open Image", bootstyle="light", command=open_image)
-inpaint_button = ttk.Button(left_frame, text="Inpaint", bootstyle="light", command=image_inpaint)
-download_mask_button = ttk.Button(left_frame, text="GetMask", bootstyle="light", command=download_mask)
+# 加载按钮对应的图标
+img_open = ttk.PhotoImage(file='ui_imgs/btn_open_image.png').subsample(6, 6)
+
+image_button = ttk.Button(left_frame, text="Open Image", compound="left", bootstyle="info-outline", command=open_image,
+                          image=img_open)
+
 s1 = ttk.Scale(left_frame, variable=pen_size_dv,
                from_=1, to=15,
                bootstyle="dark",
                orient=ttk.HORIZONTAL)
+inpaint_button = ttk.Button(right_frame, text="Inpaint", bootstyle="light", command=image_inpaint)
+download_mask_button = ttk.Button(right_frame, text="GetMask", bootstyle="light", command=download_mask)
 
-image_button.pack(pady=5)
+image_button.pack(padx=5, pady=5)
 s1.pack()
-inpaint_button.pack(pady=5)
+inpaint_button.pack(padx=5, pady=5)
 download_mask_button.pack(pady=5)
 root.mainloop()
