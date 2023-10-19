@@ -133,19 +133,23 @@ canvas.pack()
 canvas.bind("<B1-Motion>", draw)
 
 # 加载按钮对应的图标
-img_open = ttk.PhotoImage(file='ui_imgs/btn_open_image.png').subsample(6, 6)
+icon_open = ttk.PhotoImage(file='ui_imgs/btn_open_image.png').subsample(6, 6)
+icon_pen = ttk.PhotoImage(file='ui_imgs/btn_pen.png').subsample(6, 6)
 
 image_button = ttk.Button(left_frame, text="Open Image", compound="left", bootstyle="info-outline", command=open_image,
-                          image=img_open)
+                          image=icon_open)
+
+label_burst = ttk.Label(left_frame, text='Burst Size', compound='right')
 
 s1 = ttk.Scale(left_frame, variable=pen_size_dv,
                from_=1, to=15,
                bootstyle="dark",
                orient=ttk.HORIZONTAL)
-inpaint_button = ttk.Button(right_frame, text="Inpaint", bootstyle="light", command=image_inpaint)
-download_mask_button = ttk.Button(right_frame, text="GetMask", bootstyle="light", command=download_mask)
+inpaint_button = ttk.Button(left_frame, text="Inpaint", bootstyle="light", command=image_inpaint)
+download_mask_button = ttk.Button(left_frame, text="GetMask", bootstyle="light", command=download_mask)
 
 image_button.pack(padx=5, pady=5)
+label_burst.pack()
 s1.pack()
 inpaint_button.pack(padx=5, pady=5)
 download_mask_button.pack(pady=5)
