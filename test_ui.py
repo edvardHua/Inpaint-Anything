@@ -2,6 +2,9 @@
 # @Time : 2023/10/18 18:28
 # @Author : zihua.zeng
 # @File : test_edz.py
+#
+# 晚些加入 sam 模块，测试例子在 test_func.py 里
+#
 
 import tkinter as tk
 import ttkbootstrap as ttk
@@ -14,7 +17,7 @@ from PIL import Image, ImageDraw, ImageTk
 WIDTH = 750
 HEIGHT = 560
 file_path = ""
-pen_color = "blue"
+pen_color = "black"
 image_mask = None
 image_rz = None
 image_inpainted = None
@@ -109,7 +112,7 @@ root = ttk.Window(themename="cosmo")
 root.title("")
 
 pen_size_dv = DoubleVar()
-pen_size_dv.set(3)
+pen_size_dv.set(6)
 
 # 宽 x 高，+x+y，决定了窗口展示的位置
 root.geometry("950x580+300+110")
@@ -132,6 +135,11 @@ canvas.pack()
 # binding the Canvas to the B1-Motion event
 canvas.bind("<B1-Motion>", draw)
 
+# 放置一个空白背景
+image_bg = Image.open("ui_imgs/empty_bg.jpg")
+image_empty = ImageTk.PhotoImage(image_bg)
+canvas.create_image(0, 0, anchor="nw", image=image_empty)
+
 # 加载按钮对应的图标
 icon_open = ttk.PhotoImage(file='ui_imgs/btn_open_image.png').subsample(6, 6)
 icon_pen = ttk.PhotoImage(file='ui_imgs/btn_pen.png').subsample(6, 6)
@@ -139,18 +147,18 @@ icon_pen = ttk.PhotoImage(file='ui_imgs/btn_pen.png').subsample(6, 6)
 image_button = ttk.Button(left_frame, text="Open Image", compound="left", bootstyle="info-outline", command=open_image,
                           image=icon_open)
 
-label_burst = ttk.Label(left_frame, text='Burst Size', compound='right')
+label_burst = ttk.Label(left_frame, text='Brush Size          ', compound='right')
 
 s1 = ttk.Scale(left_frame, variable=pen_size_dv,
                from_=1, to=15,
                bootstyle="dark",
                orient=ttk.HORIZONTAL)
-inpaint_button = ttk.Button(left_frame, text="Inpaint", bootstyle="light", command=image_inpaint)
-download_mask_button = ttk.Button(left_frame, text="GetMask", bootstyle="light", command=download_mask)
+inpaint_button = ttk.Button(left_frame, text="    Inpaint    ", bootstyle="default-outline", command=image_inpaint)
+download_mask_button = ttk.Button(left_frame, text="  GetMask  ", bootstyle="secondary-link", command=download_mask)
 
-image_button.pack(padx=5, pady=5)
-label_burst.pack()
-s1.pack()
-inpaint_button.pack(padx=5, pady=5)
-download_mask_button.pack(pady=5)
+image_button.pack(padx=10, pady=30)
+label_burst.pack(padx=10, pady=10)
+s1.pack(padx=10, pady=10)
+download_mask_button.pack(padx=10, pady=5)
+inpaint_button.pack(padx=10, pady=10)
 root.mainloop()
